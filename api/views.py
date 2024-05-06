@@ -6,7 +6,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.views import APIView
 
 from .models import Image, Ticket
-from .serializers import ImageUploadSerializer, UserSerializer, TicketSerializer, ImageSerializer
+from .serializers import (
+    ImageUploadSerializer,
+    UserSerializer,
+    TicketSerializer,
+    ImageSerializer,
+)
 from .authentication import BearerTokenAuthentication
 from .pagination import TicketPagination
 
@@ -39,7 +44,7 @@ class TicketListCreateAPIView(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = super().get_queryset()
         return queryset.filter(user=self.request.user)
-    
+
 
 class TicketImagesAPIView(generics.ListCreateAPIView):
     queryset = Image.objects.all()
@@ -56,7 +61,9 @@ class TicketImagesAPIView(generics.ListCreateAPIView):
         try:
             ticket = Ticket.objects.get(pk=ticket_id, user=request.user)
         except Ticket.DoesNotExist:
-            return Response({'error': 'Ticket not found'}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {'error': 'Ticket not found'}, status=status.HTTP_404_NOT_FOUND
+            )
 
         serializer = ImageUploadSerializer(data=request.data)
         if serializer.is_valid():
@@ -64,5 +71,8 @@ class TicketImagesAPIView(generics.ListCreateAPIView):
             print(image)
             # Save or process the uploaded image here
             # For example, you can save it to a directory or store it in a database
-            return Response({'message': 'Image uploaded successfully'}, status=status.HTTP_201_CREATED)
+            return Response(
+                {'message': 'Image uploaded successfully'},
+                status=status.HTTP_201_CREATED,
+            )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,6 +1,8 @@
+from django.forms import ValidationError
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Ticket, Image
+
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
@@ -33,12 +35,26 @@ class TicketSerializer(serializers.ModelSerializer):
         if value < 1:
             raise serializers.ValidationError("Number of images must be at least 1.")
         return value
-    
+
+
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ['id', 'cloudinary_url', 'uploaded_at', 'ticket']
         read_only_fields = ['id', 'created_at']
 
+
 class ImageUploadSerializer(serializers.Serializer):
     image = serializers.ImageField()
+
+    def validate_image(self, value):
+        # Get the file extension
+        ext = value.name.split('.')[-1].lower()
+        # Define allowed image formats
+        allowed_formats = ['jpg', 'jpeg', 'png', 'gif']
+        # Validate if the file format is allowed
+        if ext not in allowed_formats:
+            raise ValidationError(
+                f"Only {', '.join(allowed_formats)} formats are allowed."
+            )
+        return value

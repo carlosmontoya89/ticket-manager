@@ -107,7 +107,7 @@ class TicketListCreateAPIViewTest(APITestCase):
             status='COMPLETED',
         )
         url = reverse('ticket_list_create')
-        response = self.client.get(url+'?status=COMPLETED', format='json')
+        response = self.client.get(url + '?status=COMPLETED', format='json')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data['results']), 1)
         self.assertEqual(response.data['results'][0]['title'], 'Ticket 3')
@@ -121,7 +121,9 @@ class TicketListCreateAPIViewTest(APITestCase):
             title='Ticket 2', description='Description 2', user=self.user, num_images=2
         )
         url = reverse('ticket_list_create')
-        response = self.client.get(url + '?created_at__gte=2024-01-01', format='json')  # Assuming date format
+        response = self.client.get(
+            url + '?created_at__gte=2024-01-01', format='json'
+        )  # Assuming date format
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.data['results']), 2)
 
@@ -160,7 +162,7 @@ class TicketListCreateAPIViewTest(APITestCase):
             title='Ticket 1', description='Description 1', user=self.user, num_images=1
         )
         url = reverse('ticket_list_create')
-        response = self.client.get(url+'?status=INVALID', format='json')
+        response = self.client.get(url + '?status=INVALID', format='json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
             response.data['status'][0],
@@ -187,5 +189,5 @@ class TicketListCreateAPIViewTest(APITestCase):
     def test_filter_tickets_unauthenticated(self):
         # Test filtering tickets without authentication
         url = reverse('ticket_list_create')
-        response = self.client.get(url+'?status=CREATED', format='json')
+        response = self.client.get(url + '?status=CREATED', format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
