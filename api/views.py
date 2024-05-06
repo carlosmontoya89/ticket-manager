@@ -74,7 +74,7 @@ class TicketImagesAPIView(generics.ListCreateAPIView):
         serializer = ImageUploadSerializer(data=request.data)
         if serializer.is_valid():
             image = serializer.validated_data['image']
-            upload_image_to_cloudinary(image.read(), ticket_id)
+            upload_image_to_cloudinary.delay(image.read(), ticket_id)
             return Response(
                 {'message': 'Image uploaded successfully'},
                 status=status.HTTP_201_CREATED,
