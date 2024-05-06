@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 class Ticket(models.Model):
     STATUS_CHOICES = (
         ('CREATED', 'Created'),
@@ -16,6 +17,7 @@ class Ticket(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Image(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)

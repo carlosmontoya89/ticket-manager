@@ -1,5 +1,27 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from .models import Ticket
+
+
+class TicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
+        fields = [
+            'id',
+            'title',
+            'description',
+            'status',
+            'created_at',
+            'updated_at',
+            'num_images',
+        ]
+        read_only_fields = ['status', 'created_at', 'updated_at']
+
+    def validate_num_images(self, value):
+        if value < 1:
+            raise serializers.ValidationError("Number of images must be at least 1.")
+        return value
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
