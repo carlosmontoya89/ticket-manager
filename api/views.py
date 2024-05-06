@@ -8,6 +8,7 @@ from .models import Ticket
 from .serializers import TicketSerializer
 
 from .serializers import UserSerializer
+from .authentication import BearerTokenAuthentication
 
 
 class UserRegistrationAPIView(generics.CreateAPIView):
@@ -27,6 +28,7 @@ class TicketListCreateAPIView(generics.ListCreateAPIView):
     queryset = Ticket.objects.all()
     serializer_class = TicketSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [BearerTokenAuthentication]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['status', 'created_at']
 
