@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 
 
 class Ticket(models.Model):
+    class Meta:
+        ordering = ['-id']
+        
     STATUS_CHOICES = (
         ('CREATED', 'Created'),
         ('COMPLETED', 'Completed'),
