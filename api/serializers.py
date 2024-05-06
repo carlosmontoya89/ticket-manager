@@ -3,6 +3,8 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Ticket, Image
 
+MAX_FILE_SIZE_MB = 10  # Maximum file size allowed in megabytes
+
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
@@ -48,13 +50,21 @@ class ImageUploadSerializer(serializers.Serializer):
     image = serializers.ImageField()
 
     def validate_image(self, value):
+        self.validate_file_size(value)
+        self.validate_file_format(value)
+        return value
+
+    def validate_file_size(self, value):
+        # Check if file size exceeds the maximum allowed size
+        max_size_bytes = MAX_FILE_SIZE_MB * 1024 * 1024  # Convert MB to bytes
+        if value.size > max_size_bytes:
+            raise ValidationError(f"File size exceeds the maximum limit of {MAX_FILE_SIZE_MB} MB.")
+
+    def validate_file_format(self, value):
         # Get the file extension
         ext = value.name.split('.')[-1].lower()
         # Define allowed image formats
         allowed_formats = ['jpg', 'jpeg', 'png', 'gif']
         # Validate if the file format is allowed
         if ext not in allowed_formats:
-            raise ValidationError(
-                f"Only {', '.join(allowed_formats)} formats are allowed."
-            )
-        return value
+            raise ValidationError(f"Only {', '.join(allowed_formats)} formats are allowed.")
