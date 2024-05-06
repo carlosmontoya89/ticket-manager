@@ -1,6 +1,18 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Ticket
+from .models import Ticket, Image
+
+class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, min_length=8)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'password')
+        extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
 
 
 class TicketSerializer(serializers.ModelSerializer):
@@ -21,16 +33,12 @@ class TicketSerializer(serializers.ModelSerializer):
         if value < 1:
             raise serializers.ValidationError("Number of images must be at least 1.")
         return value
-
-
-class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, min_length=8)
-
+    
+class ImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ('username', 'email', 'password')
-        extra_kwargs = {'password': {'write_only': True}}
+        model = Image
+        fields = ['id', 'cloudinary_url', 'uploaded_at', 'ticket']
+        read_only_fields = ['id', 'created_at']
 
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        return user
+class ImageUploadSerializer(serializers.Serializer):
+    image = serializers.ImageField()
