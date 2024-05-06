@@ -15,8 +15,8 @@ Before running the project, ensure you have the following installed:
 
 1. Clone the repository:
     ```
-    git clone <repository-url>
-    cd hopla
+    git clone https://github.com/carlosmontoya89/ticket-manager.git
+    cd ticket-manager
     ```
 
 2. Install dependencies:
