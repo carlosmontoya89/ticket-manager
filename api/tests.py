@@ -193,12 +193,20 @@ class TicketListCreateAPIViewTest(APITestCase):
         response = self.client.get(url + '?status=CREATED', format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+
 class TicketImagesAPIViewTest(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', email='test@example.com', password='testpassword')
+        self.user = User.objects.create_user(
+            username='testuser', email='test@example.com', password='testpassword'
+        )
         self.token = Token.objects.create(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.token.key}')
-        self.ticket = Ticket.objects.create(title='Test Ticket', description='Test Description', user=self.user, num_images=1)
+        self.ticket = Ticket.objects.create(
+            title='Test Ticket',
+            description='Test Description',
+            user=self.user,
+            num_images=1,
+        )
 
     def create_image_file(self):
         # Create a test image file

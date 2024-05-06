@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'drf_yasg',
     'cloudinary',
+    "django_rq",
 ]
 
 MIDDLEWARE = [
@@ -102,6 +103,14 @@ DATABASES = {
         'HOST': env('POSTGRESQL_HOST'),
         'PORT': env('POSTGRESQL_PORT'),
     }
+}
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+    },
 }
 
 

@@ -23,6 +23,6 @@ class Ticket(models.Model):
 
 
 class Image(models.Model):
-    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    ticket = models.ForeignKey(Ticket, related_name='images', on_delete=models.CASCADE)
     cloudinary_url = models.URLField()
     uploaded_at = models.DateTimeField(auto_now_add=True)

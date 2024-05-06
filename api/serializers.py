@@ -58,7 +58,9 @@ class ImageUploadSerializer(serializers.Serializer):
         # Check if file size exceeds the maximum allowed size
         max_size_bytes = MAX_FILE_SIZE_MB * 1024 * 1024  # Convert MB to bytes
         if value.size > max_size_bytes:
-            raise ValidationError(f"File size exceeds the maximum limit of {MAX_FILE_SIZE_MB} MB.")
+            raise ValidationError(
+                f"File size exceeds the maximum limit of {MAX_FILE_SIZE_MB} MB."
+            )
 
     def validate_file_format(self, value):
         # Get the file extension
@@ -67,4 +69,6 @@ class ImageUploadSerializer(serializers.Serializer):
         allowed_formats = ['jpg', 'jpeg', 'png', 'gif']
         # Validate if the file format is allowed
         if ext not in allowed_formats:
-            raise ValidationError(f"Only {', '.join(allowed_formats)} formats are allowed.")
+            raise ValidationError(
+                f"Only {', '.join(allowed_formats)} formats are allowed."
+            )
