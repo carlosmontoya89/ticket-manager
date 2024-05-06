@@ -107,7 +107,7 @@ DATABASES = {
 
 RQ_QUEUES = {
     'default': {
-        'HOST': 'localhost',
+        'HOST': env('REDIS_HOST'),
         'PORT': 6379,
         'DB': 0,
     },
